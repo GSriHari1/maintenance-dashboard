@@ -1,0 +1,4 @@
+Machine,Check Type,Status,Last Checked,Next Due
+Pump-1,Oil Level,Pending,2024-12-01,2025-06-01
+Compressor-2,Filter Cleaned,Completed,2025-03-01,2025-06-01
+Motor-3,Bearing Check,Pending,2024-10-01,2025-04-01
