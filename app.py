@@ -10,7 +10,12 @@ df = pd.read_csv("data.csv")
 
 # Sidebar filters
 st.sidebar.header("Filter by")
-units = st.sidebar.multiselect("Unit", df["Unit"].unique(), default=df["Unit"].unique())
+if "Unit" in df.columns:
+    units = st.sidebar.multiselect("Unit", df["Unit"].unique(), default=df["Unit"].unique())
+else:
+    st.error("The 'Unit' column is missing in the data.")
+    st.stop()
+
 machines = st.sidebar.multiselect("Machine", df["Machine"].unique(), default=df["Machine"].unique())
 statuses = st.sidebar.multiselect("Status", df["Status"].unique(), default=df["Status"].unique())
 
@@ -27,7 +32,10 @@ st.markdown("## 🛠️ Preventive Maintenance Dashboard")
 # Maintenance Task Overview
 st.markdown("### Maintenance Task Overview")
 st.dataframe(
-    filtered_df.reset_index(drop=True).rename_axis('Row').reset_index().assign(Row=lambda d: d['Row'] + 1).drop(columns=["index"])
+    filtered_df.reset_index(drop=True)
+               .rename_axis('Row')
+               .reset_index()
+               .assign(Row=lambda d: d['Row'] + 1)
 )
 
 # Pie Chart
