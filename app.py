@@ -22,7 +22,7 @@ st.markdown("## 🛠️ Preventive Maintenance Dashboard")
 # Maintenance Task Overview
 st.markdown("### Maintenance Task Overview")
 # st.dataframe(filtered_df.reset_index(drop=True).rename_axis('Row').reset_index().assign(Row=lambda d: d['Row'] + 1))
-st.dataframe(filtered_df)
+st.dataframe(filtered_df.reset_index(drop=True).rename_axis('Row').reset_index().assign(Row=lambda d: d['Row'] + 1))
 
 # Pie Chart
 st.markdown("### Task Status Distribution")
