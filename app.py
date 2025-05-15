@@ -10,33 +10,18 @@ df = pd.read_csv("data.csv")
 
 # Sidebar filters
 st.sidebar.header("Filter by")
-if "Unit" in df.columns:
-    units = st.sidebar.multiselect("Unit", df["Unit"].unique(), default=df["Unit"].unique())
-else:
-    st.error("The 'Unit' column is missing in the data.")
-    st.stop()
-
 machines = st.sidebar.multiselect("Machine", df["Machine"].unique(), default=df["Machine"].unique())
 statuses = st.sidebar.multiselect("Status", df["Status"].unique(), default=df["Status"].unique())
 
 # Filter data
-filtered_df = df[
-    (df["Unit"].isin(units)) &
-    (df["Machine"].isin(machines)) &
-    (df["Status"].isin(statuses))
-]
+filtered_df = df[(df["Machine"].isin(machines)) & (df["Status"].isin(statuses))]
 
 # Main title
 st.markdown("## 🛠️ Preventive Maintenance Dashboard")
 
 # Maintenance Task Overview
 st.markdown("### Maintenance Task Overview")
-st.dataframe(
-    filtered_df.reset_index(drop=True)
-               .rename_axis('Row')
-               .reset_index()
-               .assign(Row=lambda d: d['Row'] + 1)
-)
+st.dataframe(filtered_df)
 
 # Pie Chart
 st.markdown("### Task Status Distribution")
@@ -44,7 +29,13 @@ status_counts = filtered_df["Status"].value_counts().reset_index()
 status_counts.columns = ["Status", "Count"]
 
 if not status_counts.empty:
-    fig = px.pie(status_counts, names="Status", values="Count", title="Maintenance Status Breakdown", color_discrete_sequence=px.colors.qualitative.Set3)
+    fig = px.pie(
+        status_counts,
+        names="Status",
+        values="Count",
+        title="Maintenance Status Breakdown",
+        color_discrete_sequence=px.colors.qualitative.Set3
+    )
     st.plotly_chart(fig, use_container_width=True)
 else:
     st.info("No data available for the selected filters.")
