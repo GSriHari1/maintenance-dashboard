@@ -10,24 +10,24 @@ df = pd.read_csv("data.csv")
 
 # Sidebar filters
 st.sidebar.header("Filter by")
+units = st.sidebar.multiselect("Unit", df["Unit"].unique(), default=df["Unit"].unique())
 machines = st.sidebar.multiselect("Machine", df["Machine"].unique(), default=df["Machine"].unique())
 statuses = st.sidebar.multiselect("Status", df["Status"].unique(), default=df["Status"].unique())
 
 # Filter data
-filtered_df = df[(df["Machine"].isin(machines)) & (df["Status"].isin(statuses))]
+filtered_df = df[
+    (df["Unit"].isin(units)) &
+    (df["Machine"].isin(machines)) &
+    (df["Status"].isin(statuses))
+]
 
 # Main title
 st.markdown("## 🛠️ Preventive Maintenance Dashboard")
 
 # Maintenance Task Overview
 st.markdown("### Maintenance Task Overview")
-# st.dataframe(filtered_df.reset_index(drop=True).rename_axis('Row').reset_index().assign(Row=lambda d: d['Row'] + 1))
 st.dataframe(
-    filtered_df.reset_index(drop=True)
-    .rename_axis("Row")
-    .reset_index()
-    .assign(Row=lambda d: d["Row"] + 1)
-    .set_index("Row")
+    filtered_df.reset_index(drop=True).rename_axis('Row').reset_index().assign(Row=lambda d: d['Row'] + 1).drop(columns=["index"])
 )
 
 # Pie Chart
